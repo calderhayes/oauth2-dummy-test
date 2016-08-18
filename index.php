@@ -42,6 +42,15 @@ $server = new OAuth2Server($storage, array(
     'issuer' => $_SERVER['HTTP_POST']
 ));//), $grantTypes);
 
+$scope = new OAuth2\Scope(array(
+      'supported_scopes' => array('offline_access', 'api')
+  ));
+$server->setScopeUtil($scope);
+
+
 $server->addGrantType(new UserCredentials($storage));
 
-$server->handleTokenRequest(Request::createFromGlobals(), new Response()) -> send();
+$request = Request::createFromGlobals();
+$response = new Response();
+
+$server->handleTokenRequest($request, $response) -> send();
