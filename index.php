@@ -28,16 +28,20 @@ use OAuth2\Storage\Pdo;
 use OAuth2\Server as OAuth2Server;
 use OAuth2\GrantType\RefreshToken;
 use OAuth2\GrantType\UserCredentials;
+use OAuth2\Request;
+use OAuth2\Response;
 
 $storage = new Pdo(array('dsn' => $dsn, 'username' => $username, 'password' => $password));
 
-$grantTypes = array(
+/*$grantTypes = array(
     'user_credentials' => new UserCredentials($storage),
     'refresh_token' => new RefreshToken($storage)
-);
+);*/
 
 $server = new OAuth2Server($storage, array(
     'issuer' => $_SERVER['HTTP_POST']
-), $grantTypes);
+));//), $grantTypes);
 
+$server->addGrantType(new UserCredentials($storage));
 
+$server->handleTokenRequest(Request::createFromGlobals(), new Response()) -> send();
