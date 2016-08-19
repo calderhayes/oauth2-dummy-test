@@ -11,8 +11,8 @@ define("ENVIRONMENT", "DEV");
 $dsn = 'mysql:dbname=oauth2_db;host=localhost';
 $username = 'root';
 $password = 'ubuntu';
-$publicKey = file_get_contents('/home/ubuntu/oauth2/certs/dummy_rsa.pub');
-$privateKey = file_get_contents('/home/ubuntu/oauth2/certs/dummy_rsa');
+$publicKey = file_get_contents('/home/ubuntu/oauth2/certs/public_rsa.key');
+$privateKey = file_get_contents('/home/ubuntu/oauth2/certs/private_rsa.key');
 
 if (!array_key_exists('HTTP_POST', $_SERVER)) {
     if (ENVIRONMENT === 'DEV') {
@@ -47,7 +47,7 @@ $keyStorage = new OAuth2\Storage\Memory(array('keys' => array(
 
 $server = new OAuth2Server($storage, array(
     'issuer' => $_SERVER['HTTP_POST'],
-    'use_openid_connect' => true
+    'use_jwt_access_tokens' => true
 ));//), $grantTypes);
 
 $server->addStorage($keyStorage, 'public_key');
