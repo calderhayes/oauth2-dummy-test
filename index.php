@@ -11,8 +11,8 @@ define("ENVIRONMENT", "DEV");
 $dsn = 'mysql:dbname=oauth2_db;host=localhost';
 $username = 'root';
 $password = 'ubuntu';
-$publicKey = file_get_contents('/home/ubuntu/oauth2/certs/public_rsa.key');
-$privateKey = file_get_contents('/home/ubuntu/oauth2/certs/private_rsa.key');
+$secretKey = 'UHxNtYMRYwvfpO1dS5pWLKL0M2DgOj40EbN4SoBWgfc';
+
 
 if (!array_key_exists('HTTP_POST', $_SERVER)) {
     if (ENVIRONMENT === 'DEV') {
@@ -35,22 +35,17 @@ use OAuth2\Response;
 
 $storage = new Pdo(array('dsn' => $dsn, 'username' => $username, 'password' => $password));
 
-$dummy = 'UHxNtYMRYwvfpO1dS5pWLKL0M2DgOj40EbN4SoBWgfc';
 
 $keyStorage = new OAuth2\Storage\Memory(array('keys' => array(
-    'private_key' => $dummy,
+    'private_key' => $secretKey,
     'encryption_algorithm' => 'HS256'
 )));
 
-/*$grantTypes = array(
-    'user_credentials' => new UserCredentials($storage),
-    'refresh_token' => new RefreshToken($storage)
-);*/
 
 $server = new OAuth2Server($storage, array(
     'issuer' => $_SERVER['HTTP_POST'],
     'use_jwt_access_tokens' => true
-));//), $grantTypes);
+));
 
 $server->addStorage($keyStorage, 'public_key');
 
