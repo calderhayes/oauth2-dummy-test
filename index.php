@@ -35,9 +35,11 @@ use OAuth2\Response;
 
 $storage = new Pdo(array('dsn' => $dsn, 'username' => $username, 'password' => $password));
 
+$dummy = 'UHxNtYMRYwvfpO1dS5pWLKL0M2DgOj40EbN4SoBWgfc';
+
 $keyStorage = new OAuth2\Storage\Memory(array('keys' => array(
-    'public_key' => $publicKey,
-    'private_key' => $privateKey
+    'private_key' => $dummy,
+    'encryption_algorithm' => 'HS256'
 )));
 
 /*$grantTypes = array(
